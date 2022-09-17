@@ -16,7 +16,7 @@ public class Club {
     private String clubName;
     private int managerID;
     private Date datedCreated;
-    private String Location;
+    private String location;
     private String description;
     private String logo;
 
@@ -31,21 +31,22 @@ public class Club {
     public Club() {
     }
 
-    public Club(int clubID, String clubName, int managerID, Date datedCreated, String description, String logo) {
+    public Club(int clubID, String clubName, int managerID, Date datedCreated, String location, String description, String logo) {
         this.clubID = clubID;
         this.clubName = clubName;
         this.managerID = managerID;
         this.datedCreated = datedCreated;
+        this.location = location;
         this.description = description;
         this.logo = logo;
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
-    public void setLocation(String Location) {
-        this.Location = Location;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getClubID() {

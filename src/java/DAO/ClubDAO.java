@@ -9,6 +9,9 @@ import Database.ConnectDB;
 import entity.Club;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -98,5 +101,32 @@ public class ClubDAO {
             return;
         }
     }
+    
+    public static List<Club> getAllClubs() throws Exception {
+        ConnectDB db = ConnectDB.getInstance();
+        Connection con = null;
+        List<Club> clubs = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+//        String check = null;
+        try {
+            con = db.openConnection();
+            String sql = "SELECT* FROM CLUBS";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                java.util.Date  date = new java.util.Date(rs.getDate(4).getTime());
+                clubs.add(new Club(rs.getInt(1),rs.getString(2),rs.getInt(3),date,rs.getString(5),rs.getString(6),rs.getString(7)));
+            }
+            rs.close();
+            statement.close();
+            con.close();
+
+        } catch (Exception e) {
+            return null;
+        }
+        return clubs;
+    }
+
     
 }
