@@ -41,7 +41,8 @@ public class UserDAO implements UserDAOInterface{
                 String password = rs.getString(5).trim();
                 Date dOB = rs.getDate(6);
                 String address = rs.getString(7).trim();
-                list.add(new User(userID, username, name, email, password, dOB, address));
+                String avatar = rs.getString(8).trim();
+                list.add(new User(userID, username, name, email, password, dOB, address,avatar));
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,8 +61,8 @@ public class UserDAO implements UserDAOInterface{
     
     @Override
     public void addUser(User user) {
-        String sql = "INSERT INTO [USERS] (userID, username, name, email, password, dob, address)\n"+
-                "VALUES (?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO [USERS] (userID, username, name, email, password, dob, address, avatar)\n"+
+                "VALUES (?,?,?,?,?,?,?,?);";
         try {
             con = db.openConnection();
             statement = con.prepareStatement(sql);
@@ -72,6 +73,7 @@ public class UserDAO implements UserDAOInterface{
             statement.setString(5, user.getPassword());
             statement.setDate(6, user.getdOB());
             statement.setString(7, user.getAddress());
+            statement.setString(8, user.getAvatar());
             statement.execute();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -122,7 +124,7 @@ public class UserDAO implements UserDAOInterface{
     @Override
     public void updateUser(User user) {
         String sql = "UPDATE USERS\n"
-                + "SET username = ?, name = ?, email = ?, password = ?, dOB = ?, address = ?\n"
+                + "SET username = ?, name = ?, email = ?, password = ?, dOB = ?, address = ?, avatar = ?\n"
                 + "WHERE userID = ?;";
         try {
             con = db.openConnection();
@@ -134,6 +136,7 @@ public class UserDAO implements UserDAOInterface{
             statement.setDate(5, user.getdOB());
             statement.setString(6,user.getAddress());
             statement.setInt(7, user.getUserID());
+            statement.setString(8, user.getAvatar());
             statement.execute();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

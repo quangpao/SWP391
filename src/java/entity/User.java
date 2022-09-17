@@ -18,8 +18,9 @@ public class User {
     private String password;
     private Date dOB;
     private String address;
+    private String avatar;
 
-    public User(int userID, String username, String name, String email, String password, Date dOB, String address) {
+    public User(int userID, String username, String name, String email, String password, Date dOB, String address, String avatar) {
         this.userID = userID;
         this.username = username;
         this.name = name;
@@ -27,6 +28,16 @@ public class User {
         this.password = password;
         this.dOB = dOB;
         this.address = address;
+        this.avatar = avatar;
+    }
+
+    
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public int getUserID() {
@@ -87,7 +98,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userID=" + userID + ", username=" + username + ", name=" + name + ", email=" + email + ", password=" + password + ", dOB=" + dOB + ", address=" + address + '}';
+        return "User{" + "userID=" + userID + ", username=" + username + ", name=" + name + ", email=" + email + ", password=" + password + ", dOB=" + dOB + ", address=" + address + ", avatar=" + avatar + '}';
     }
     
     
