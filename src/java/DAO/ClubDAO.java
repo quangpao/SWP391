@@ -111,7 +111,7 @@ public class ClubDAO {
 //        String check = null;
         try {
             con = db.openConnection();
-            String sql = "SELECT* FROM CLUBS";
+            String sql = "SELECT * FROM CLUBS";
             statement = con.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
@@ -127,6 +127,4 @@ public class ClubDAO {
         }
         return clubs;
     }
-
-    
 }
