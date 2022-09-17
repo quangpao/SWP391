@@ -4,7 +4,7 @@
  */
 package entity;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -33,12 +33,12 @@ public class Post {
         this.clubID = clubID;
         this.userID = userID;
     }
-
     
     //Set method
     public void setPostID(int postID) {
         this.postID = postID;
     }
+
 
     public void setPostType(char postType) {
         this.postType = postType;
