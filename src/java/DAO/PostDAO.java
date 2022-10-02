@@ -138,5 +138,72 @@ public class PostDAO implements PostDAOInterface{
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public ArrayList<Post> getClubPosts(int clubID) {
+        ArrayList<Post> list = new ArrayList<>();
+        try {
+            con = db.openConnection();
+            String sql = "SELECT * FROM [POSTS] WHERE clubID = " + clubID + " order by postID";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int postID = Integer.parseInt(rs.getString(1).trim());
+                char postType = rs.getString(2).charAt(0);
+                String content = rs.getString(3).trim();
+                // int clubID = rs.getInt(4);
+                int userID = rs.getInt(5);
+                Date time = rs.getDate(6);
+                int permission = rs.getInt(7);
+                list.add(new Post(postID, postType, content, time, permission, clubID, userID));
+                
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public Post getPostByID(int postID) {
+        try {
+            con = db.openConnection();
+            String sql = "SELECT * FROM [POSTS] WHERE postID = " + postID;
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                // int postID = Integer.parseInt(rs.getString(1).trim());
+                char postType = rs.getString(2).charAt(0);
+                String content = rs.getString(3).trim();
+                int clubID = rs.getInt(4);
+                int userID = rs.getInt(5);
+                Date time = rs.getDate(6);
+                int permission = rs.getInt(7);
+                return new Post(postID, postType, content, time, permission, clubID, userID);
+                
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
 }

@@ -135,4 +135,36 @@ public class CommentDAO {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public ArrayList<Comment> getPostComments(int postID) {
+        ArrayList<Comment> list = new ArrayList<>();
+        try {
+            con = db.openConnection();
+            String sql = "SELECT * FROM [COMMENTS] WHERE postID=" + postID + " order by commentID";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int commentID = Integer.parseInt(rs.getString(1).trim());
+                int userID = Integer.parseInt(rs.getString(2).trim());
+                // int postID = Integer.parseInt(rs.getString(3).trim());
+                Date time = rs.getDate(4);
+                String content = rs.getString(5);
+                list.add(new Comment(commentID, userID, postID, time, content));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            rs.close();
+            statement.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    
 }
