@@ -4,7 +4,12 @@
  */
 package entity;
 
+import DAO.CommentDAO;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -20,7 +25,10 @@ public class Post {
 //    foreign key
     private int clubID;
     private int userID;
-
+    private ArrayList<Comment> postComments;
+    
+    
+    private CommentDAO DAO = new CommentDAO();
     public Post() {
     }
 
@@ -93,8 +101,47 @@ public class Post {
         return userID;
     }
     
+    public void setComment(ArrayList<Comment> comments) {
+        this.postComments = comments;
+    }
     
+    public ArrayList<Comment> getComment() {
+        return this.postComments;
+    }
     
+    public ArrayList<String> timeParse() {
+        
+        ArrayList<String> list = new ArrayList<>();
+        
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd");  
+        
+        String strDate = dateFormat.format(time);
+        
+        StringTokenizer stkn = new StringTokenizer(strDate);
+        
+        while (stkn.hasMoreTokens())
+            list.add(stkn.nextToken());
+        
+        return list;
+    }
     
+//    private void fetchComments() {
+//        
+//        ArrayList<Comment> list = DAO.getPostComments(postID);
+//        
+//        this.postComments = list;
+//        
+//    }
+//    
+//    public ArrayList<Comment> getAllComments() {
+//        
+//        fetchComments();
+//        
+//        return this.postComments;
+//    }
+//    
+//    public ArrayList<Comment> deleteComment(int i) {
+//        
+//    }
     
 }

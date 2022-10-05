@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Database.ConnectDB;
+import entity.Comment;
 import entity.Post;
 
 /**
@@ -22,13 +23,38 @@ import entity.Post;
 public class PostDAO implements PostDAOInterface{
 
     ConnectDB db = ConnectDB.getInstance();
-    Connection con = null;
-    PreparedStatement statement = null;
-    ResultSet rs = null;
+    
 
+    public ArrayList<Comment> getCommentByPost(int postID) {
+        Connection con;
+        PreparedStatement statement;
+        ResultSet rs;
+        ArrayList<Comment> list = new ArrayList<>();
+        try {
+            con = db.openConnection();
+            String sql = "SELECT * FROM [COMMENTS] WHERE postID=" + postID + " order by commentID";
+            statement = con.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                int commentID = Integer.parseInt(rs.getString(1).trim());
+                int userID = Integer.parseInt(rs.getString(2).trim());
+                Date time = rs.getDate(4);
+                String content = rs.getString(5);
+                list.add(new Comment(commentID, userID, postID, time, content));
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return list;
+        
+    }
 
     @Override
     public ArrayList<Post> getPost() {
+        Connection con;
+        PreparedStatement statement;
+        ResultSet rs;
         ArrayList<Post> list = new ArrayList<>();
         try {
             con = db.openConnection();
@@ -43,20 +69,13 @@ public class PostDAO implements PostDAOInterface{
                 int userID = rs.getInt(5);
                 Date time = rs.getDate(6);
                 int permission = rs.getInt(7);
-                list.add(new Post(postID, postType, content, time, permission, clubID, userID));
+                Post newPost = new Post(postID, postType, content, time, permission, clubID, userID);
+                newPost.setComment(getCommentByPost(postID));
+                list.add(newPost);
                 
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-            rs.close();
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
+            
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
@@ -64,6 +83,9 @@ public class PostDAO implements PostDAOInterface{
 
     @Override
     public void addPost(Post post) {
+        Connection con;
+        PreparedStatement statement;
+//        ResultSet rs;
         try {
             con = db.openConnection();
             String sql = "INSERT INTO [POSTS] VALUES(?,?,?,?,?,?,?)";
@@ -76,21 +98,16 @@ public class PostDAO implements PostDAOInterface{
             statement.setDate(6, post.getTime());
             statement.setInt(7, post.getPermission());
             statement.executeUpdate();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
     public boolean deletePost(int postID) {
+        Connection con;
+        PreparedStatement statement;
+//        ResultSet rs;
         try {
             con = db.openConnection();
             String sql = "DELETE FROM [POSTS] WHERE postID = ?";
@@ -98,15 +115,7 @@ public class PostDAO implements PostDAOInterface{
             statement.setInt(1, postID);
             statement.executeUpdate();
             return true;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
@@ -114,6 +123,9 @@ public class PostDAO implements PostDAOInterface{
 
     @Override
     public void updatePost(Post post) {
+        Connection con;
+        PreparedStatement statement;
+//        ResultSet rs = null;
         try {
             con = db.openConnection();
             String sql = "UPDATE [POSTS] SET postType = ?, content = ?, clubID = ?, userID = ?, time = ?, permission = ? WHERE postID = ?";
@@ -126,20 +138,15 @@ public class PostDAO implements PostDAOInterface{
             statement.setInt(6, post.getPermission());
             statement.setInt(7, post.getPostID());
             statement.executeUpdate();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public ArrayList<Post> getClubPosts(int clubID) {
+        Connection con;
+        PreparedStatement statement;
+        ResultSet rs;
         ArrayList<Post> list = new ArrayList<>();
         try {
             con = db.openConnection();
@@ -157,23 +164,17 @@ public class PostDAO implements PostDAOInterface{
                 list.add(new Post(postID, postType, content, time, permission, clubID, userID));
                 
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {
-            rs.close();
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return list;
     }
 
     public Post getPostByID(int postID) {
+        Connection con;
+        PreparedStatement statement;
+        ResultSet rs;
         try {
             con = db.openConnection();
             String sql = "SELECT * FROM [POSTS] WHERE postID = " + postID;
@@ -190,19 +191,10 @@ public class PostDAO implements PostDAOInterface{
                 return new Post(postID, postType, content, time, permission, clubID, userID);
                 
             }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {
-            rs.close();
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return null;
     }
     
