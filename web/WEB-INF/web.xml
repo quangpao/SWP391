@@ -8,6 +8,18 @@
         <servlet-name>ClubDAO</servlet-name>
         <servlet-class>DAO.ClubDAO</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AuthenticationServlet</servlet-name>
+        <servlet-class>controller.servlet.AuthenticationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>controller.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegisterServlet</servlet-name>
+        <servlet-class>RegisterServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Clubs</servlet-name>
         <url-pattern>/Clubs</url-pattern>
@@ -15,6 +27,18 @@
     <servlet-mapping>
         <servlet-name>ClubDAO</servlet-name>
         <url-pattern>/ClubDAO</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthenticationServlet</servlet-name>
+        <url-pattern>/AuthenticationServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterServlet</servlet-name>
+        <url-pattern>/RegisterServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

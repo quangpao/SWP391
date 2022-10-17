@@ -152,5 +152,61 @@ public class UserDAO implements UserDAOInterface{
         }
         
     }
-
+    
+    
+    public boolean checkLogin(String email, String password) {
+        boolean isValid = false;
+        
+        String sql = "SELECT * FROM [USERS] WHERE email = ? and password = ?";
+        try {
+            con = db.openConnection();
+            statement = con.prepareStatement(sql);
+            statement.setString(1, email);
+            statement.setString(2, password); //Need Hashing here @husone__
+            ResultSet rs = statement.executeQuery();
+            
+            if(rs.next()) {
+                isValid = true;
+            }
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                statement.close();
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return isValid;
+    }
+    
+    public boolean isValid(String email) {
+        boolean isValid = false;
+        
+        String sql = "SELECT * FROM [USERS] WHERE email = ?";
+        try {
+            con = db.openConnection();
+            statement = con.prepareStatement(sql);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
+            
+            if(rs.next()) {
+                isValid = true;
+            }
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                statement.close();
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return isValid;
+    }
+        
 }
